@@ -22,3 +22,9 @@ X_train = train[feat_W1]
 y_train = train[fg["target"]]
 X_val   = val[feat_W1]
 y_val   = val[fg["target"]]
+
+
+# 注意：feat_W1 含 NaN（cnt_lag168 前 168 行、缺失小时附近）。
+# XGBoost 可直接处理；Ridge/MLP 需在训练集上拟合插补，再 transform 验证/测试。
+# 信息准则：weather_basic 为目标时刻实测天气，属事后回测设定。
+# 主结果请使用 fg["weather_lag_conservative"]；weather_basic 仅作上界参考。

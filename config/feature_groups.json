@@ -22,6 +22,34 @@
     "cnt_lag168"
   ],
   "weather_basic": [
+    "temp_lag1",
+    "atemp_lag1",
+    "hum_lag1",
+    "windspeed_lag1",
+    "weathersit_1_lag1",
+    "weathersit_2_lag1",
+    "weathersit_3_lag1",
+    "weathersit_4_lag1"
+  ],
+  "weather_lag": [
+    "temp_lag2",
+    "atemp_lag2",
+    "hum_lag2",
+    "windspeed_lag2",
+    "weathersit_1_lag2",
+    "weathersit_2_lag2",
+    "weathersit_3_lag2",
+    "weathersit_4_lag2"
+  ],
+  "weather_extreme": [
+    "is_heavy_rain_lag1",
+    "is_extreme_heat_lag1",
+    "is_high_wind_lag1"
+  ],
+  "weather_cumulative": [
+    "adverse_weather_hours_3h"
+  ],
+  "weather_target_hour": [
     "temp",
     "atemp",
     "hum",
@@ -31,28 +59,12 @@
     "weathersit_3",
     "weathersit_4"
   ],
-  "weather_lag_optimistic": [
-    "temp_lag1",
-    "hum_lag1",
-    "windspeed_lag1",
-    "rain_lag1"
-  ],
-  "weather_lag_conservative": [
-    "temp_lag2",
-    "hum_lag2",
-    "windspeed_lag2",
-    "rain_lag2"
-  ],
-  "weather_extreme": [
+  "group_cols": [
+    "weathersit",
+    "is_rain",
     "is_heavy_rain",
     "is_extreme_heat",
     "is_high_wind"
-  ],
-  "weather_cumulative_optimistic": [
-    "rain_sum_3h_optimistic"
-  ],
-  "weather_cumulative_conservative": [
-    "rain_sum_3h_conservative"
   ],
   "optional_raw": [
     "season",
@@ -62,13 +74,34 @@
     "weekday",
     "weathersit"
   ],
+  "midterm_plan": {
+    "W0_no_weather": [
+      "time",
+      "demand_lag"
+    ],
+    "W1_basic_weather": [
+      "time",
+      "demand_lag",
+      "weather_basic"
+    ],
+    "note": "weather_basic 为 t-1 时刻实测天气，符合「t-1 小时结束后预测 t 小时」的信息准则。天气增益应以 W0 为参照，而不是 Persistence。",
+    "endterm_ablation": [
+      "W1 + weather_lag",
+      "W1 + weather_extreme",
+      "W1 + weather_cumulative",
+      "W1 + weather_lag + weather_extreme + weather_cumulative"
+    ]
+  },
   "notes": {
-    "weather_basic": "包含目标时刻实测天气；主实验需声明是实测还是预报可用。",
-    "weather_lag_optimistic": "假设 t-1 天气可用，仅作上界参考，不作主结果。",
-    "weather_lag_conservative": "仅使用 t-2 及更早天气，主结果推荐。",
-    "weather_cumulative_optimistic": "t-1 至 t-3 的降雨指示累积。",
-    "weather_cumulative_conservative": "t-2 至 t-4 的降雨指示累积。",
-    "missing_hours": "完整小时网格中目标缺失的小时，保留但不参与训练/评估。",
-    "cnt_lag168": "前 168 行必然为 NaN，训练时需 dropna 或由树模型处理。"
+    "forecast_timing": "在 t-1 小时结束、该小时记录可用后，预测 t 小时租借量。主结果特征不得使用 t 时刻天气。",
+    "weather_basic": "t-1 时刻实测天气，主结果基础天气组。",
+    "weather_lag": "t-2 时刻天气，期末消融「+ 滞后」组从这一层加起。",
+    "weather_extreme": "基于 t-1 时刻构造的极端指标。",
+    "weather_cumulative": "t-3 至 t-1 中 weathersit ∈ {3,4} 的小时数。weathersit=3/4 同时涵盖雨、雪、雾等，不应只称为 rain。",
+    "weather_target_hour": "t 时刻实测天气，仅用于事后回测和按目标时刻天气做误差分组，不得进入主结果特征。",
+    "is_extreme_heat_threshold": "temp > 0.8，按 UCI 公式 temp = 原始温度 / 41，对应约 32.8℃。",
+    "is_high_wind_threshold": "windspeed > 0.6，按 UCI 公式 windspeed = 原始风速 / 67，对应约 40.2 km/h。",
+    "missing_hours": "完整小时网格中目标缺失的小时，保留并标记 is_missing_hour=1，不参与训练/评估；不插值目标。",
+    "cnt_lag168": "前 168 行必然为 NaN；训练时 dropna 或由树模型处理。"
   }
 }
