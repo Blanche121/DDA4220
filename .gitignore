@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# 运行产物：不进入 Git
+data/processed/
+models/
+*.parquet
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+*.log
+results/figures/

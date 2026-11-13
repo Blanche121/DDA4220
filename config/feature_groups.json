@@ -1,0 +1,74 @@
+{
+  "target": "cnt",
+  "id_cols": [
+    "datetime",
+    "split",
+    "is_missing_hour"
+  ],
+  "time": [
+    "hr_sin",
+    "hr_cos",
+    "weekday_sin",
+    "weekday_cos",
+    "workingday",
+    "mnth_sin",
+    "mnth_cos"
+  ],
+  "demand_lag": [
+    "cnt_lag1",
+    "cnt_lag2",
+    "cnt_lag3",
+    "cnt_lag24",
+    "cnt_lag168"
+  ],
+  "weather_basic": [
+    "temp",
+    "atemp",
+    "hum",
+    "windspeed",
+    "weathersit_1",
+    "weathersit_2",
+    "weathersit_3",
+    "weathersit_4"
+  ],
+  "weather_lag_optimistic": [
+    "temp_lag1",
+    "hum_lag1",
+    "windspeed_lag1",
+    "rain_lag1"
+  ],
+  "weather_lag_conservative": [
+    "temp_lag2",
+    "hum_lag2",
+    "windspeed_lag2",
+    "rain_lag2"
+  ],
+  "weather_extreme": [
+    "is_heavy_rain",
+    "is_extreme_heat",
+    "is_high_wind"
+  ],
+  "weather_cumulative_optimistic": [
+    "rain_sum_3h_optimistic"
+  ],
+  "weather_cumulative_conservative": [
+    "rain_sum_3h_conservative"
+  ],
+  "optional_raw": [
+    "season",
+    "yr",
+    "holiday",
+    "mnth",
+    "weekday",
+    "weathersit"
+  ],
+  "notes": {
+    "weather_basic": "包含目标时刻实测天气；主实验需声明是实测还是预报可用。",
+    "weather_lag_optimistic": "假设 t-1 天气可用，仅作上界参考，不作主结果。",
+    "weather_lag_conservative": "仅使用 t-2 及更早天气，主结果推荐。",
+    "weather_cumulative_optimistic": "t-1 至 t-3 的降雨指示累积。",
+    "weather_cumulative_conservative": "t-2 至 t-4 的降雨指示累积。",
+    "missing_hours": "完整小时网格中目标缺失的小时，保留但不参与训练/评估。",
+    "cnt_lag168": "前 168 行必然为 NaN，训练时需 dropna 或由树模型处理。"
+  }
+}
