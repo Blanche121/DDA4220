@@ -1,0 +1,83 @@
+{
+  "forecast_timing": "Predict hour t after hour t-1 is observed",
+  "sample_policy": "Complete target and all W1 features",
+  "n_train": 8171,
+  "n_val": 6516,
+  "features": {
+    "W0": [
+      "hr_sin",
+      "hr_cos",
+      "weekday_sin",
+      "weekday_cos",
+      "workingday",
+      "mnth_sin",
+      "mnth_cos",
+      "cnt_lag1",
+      "cnt_lag2",
+      "cnt_lag3",
+      "cnt_lag24",
+      "cnt_lag168"
+    ],
+    "W1": [
+      "hr_sin",
+      "hr_cos",
+      "weekday_sin",
+      "weekday_cos",
+      "workingday",
+      "mnth_sin",
+      "mnth_cos",
+      "cnt_lag1",
+      "cnt_lag2",
+      "cnt_lag3",
+      "cnt_lag24",
+      "cnt_lag168",
+      "temp_lag1",
+      "atemp_lag1",
+      "hum_lag1",
+      "windspeed_lag1",
+      "weathersit_1_lag1",
+      "weathersit_2_lag1",
+      "weathersit_3_lag1",
+      "weathersit_4_lag1"
+    ]
+  },
+  "ridge": {
+    "preprocessing": "StandardScaler fitted on train only",
+    "fixed_alpha": 1.0,
+    "alpha_candidates": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "selection_metric": "validation MAE",
+    "selected_alphas": {
+      "W0": 100.0,
+      "W1": 100.0
+    }
+  },
+  "xgboost": {
+    "preprocessing": "No scaling",
+    "parameter_policy": "Fixed configuration, no tuning",
+    "params": {
+      "objective": "reg:squarederror",
+      "n_estimators": 300,
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "subsample": 1.0,
+      "colsample_bytree": 1.0,
+      "random_state": 42,
+      "n_jobs": 4,
+      "tree_method": "hist"
+    }
+  },
+  "prediction_postprocessing": "None; no clipping or rounding",
+  "test_evaluated": false,
+  "versions": {
+    "python": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:37:03) [MSC v.1929 64 bit (AMD64)]",
+    "pandas": "2.3.3",
+    "numpy": "2.2.5",
+    "scikit_learn": "1.7.2",
+    "xgboost": "3.4.1"
+  }
+}
